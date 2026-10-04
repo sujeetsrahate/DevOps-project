@@ -1,0 +1,14 @@
+{
+  "name": "student-task-backend",
+  "version": "1.0.0",
+  "description": "Simple Student Task Manager Backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "prom-client": "^15.1.3"
+  }
+}
