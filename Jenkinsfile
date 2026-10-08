@@ -59,31 +59,7 @@ pipeline {
             }
         }
 
-        stage("Deploy to Kubernetes") {
-            steps {
-                sh '''
-                    kubectl apply -f .\k8s\
-                    kubectl rollout restart deployment/backend -n student-app
-
-                    kubectl rollout restart deployment/frontend -n student-app
-                '''
-            }
-        }
-
-        stage("Verify Deployment") {
-            steps {
-                sh '''
-                    kubectl rollout status deployment/backend -n student-app
-
-                    kubectl rollout status deployment/frontend -n student-app
-
-                    kubectl get pods -n student-app
-
-                    kubectl get svc -n student-app
-                '''
-            }
-        }
-    }
+        
 
     post {
 
