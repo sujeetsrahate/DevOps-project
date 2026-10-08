@@ -25,7 +25,7 @@ spec:
 
         - name: backend
 
-          image: sujeetsr07/student-task-backend:latest
+          image: sujeetsr07/std-backend-img
 
           imagePullPolicy: Always
 
