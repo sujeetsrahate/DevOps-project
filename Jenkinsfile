@@ -4,8 +4,8 @@ pipeline {
 
     environment {
         DOCKER_USER = "sujeetsr07"
-        BACKEND_IMAGE = "${DOCKER_USER}/student-task-backend"
-        FRONTEND_IMAGE = "${DOCKER_USER}/student-task-frontend"
+        BACKEND_IMAGE = "sujeetsr07/student-task-backend"
+        FRONTEND_IMAGE = "sujeetsr07/student-task-frontend"
     }
 
     stages {
@@ -13,6 +13,24 @@ pipeline {
         stage("Checkout") {
             steps {
                 checkout scm
+            }
+        }
+
+        stage("Docker Login") {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: "docker-hub-cred",
+                        usernameVariable: "DOCKER_USERNAME",
+                        passwordVariable: "DOCKER_PASSWORD"
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login \
+                        -u "$DOCKER_USERNAME" \
+                        --password-stdin
+                    '''
+                }
             }
         }
 
@@ -32,22 +50,12 @@ pipeline {
             }
         }
 
-        stage("Docker Login & Push") {
+        stage("Push Images") {
             steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: "docker-hub-token",
-                        usernameVariable: "DOCKER_USERNAME",
-                        passwordVariable: "DOCKER_PASSWORD"
-                    )
-                ]) {
-                    sh '''
-                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-                        docker push ${BACKEND_IMAGE}:latest
-                        docker push ${FRONTEND_IMAGE}:latest
-                    '''
-                }
+                sh '''
+                    docker push ${BACKEND_IMAGE}:latest
+                    docker push ${FRONTEND_IMAGE}:latest
+                '''
             }
         }
 
@@ -57,6 +65,7 @@ pipeline {
                     kubectl apply -k k8s
 
                     kubectl rollout restart deployment/backend -n student-app
+
                     kubectl rollout restart deployment/frontend -n student-app
                 '''
             }
@@ -66,9 +75,11 @@ pipeline {
             steps {
                 sh '''
                     kubectl rollout status deployment/backend -n student-app
+
                     kubectl rollout status deployment/frontend -n student-app
 
                     kubectl get pods -n student-app
+
                     kubectl get svc -n student-app
                 '''
             }
@@ -76,6 +87,7 @@ pipeline {
     }
 
     post {
+
         success {
             echo "Deployment successful!"
         }
