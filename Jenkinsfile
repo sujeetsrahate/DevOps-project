@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         DOCKER_USER = "sujeetsr07"
+
         BACKEND_IMAGE = "sujeetsr07/student-task-backend"
         FRONTEND_IMAGE = "sujeetsr07/student-task-frontend"
     }
@@ -37,7 +38,9 @@ pipeline {
         stage("Build Backend") {
             steps {
                 sh '''
-                    docker build -t ${BACKEND_IMAGE}:latest ./backend
+                    docker build \
+                    -t ${BACKEND_IMAGE}:latest \
+                    ./backend
                 '''
             }
         }
@@ -45,7 +48,9 @@ pipeline {
         stage("Build Frontend") {
             steps {
                 sh '''
-                    docker build -t ${FRONTEND_IMAGE}:latest ./frontend
+                    docker build \
+                    -t ${FRONTEND_IMAGE}:latest \
+                    ./frontend
                 '''
             }
         }
@@ -58,17 +63,16 @@ pipeline {
                 '''
             }
         }
-
-        
+    }
 
     post {
 
         success {
-            echo "Deployment successful!"
+            echo "Docker images built and pushed successfully!"
         }
 
         failure {
-            echo "Deployment failed!"
+            echo "Pipeline failed!"
         }
 
         always {
@@ -78,3 +82,4 @@ pipeline {
         }
     }
 }
+
