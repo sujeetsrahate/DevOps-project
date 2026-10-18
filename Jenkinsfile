@@ -76,7 +76,7 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: "git-creds", // <-- Update with your GitHub Jenkins Credential ID
+                        credentialsId: "github-credential", // <-- Update with your GitHub Jenkins Credential ID
                         usernameVariable: "GIT_USERNAME",
                         passwordVariable: "GIT_TOKEN"
                     )
