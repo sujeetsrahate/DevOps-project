@@ -25,7 +25,7 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: "Docker-hub-credentials",
+                        credentialsId: "docker-hub-cred",
                         usernameVariable: "DOCKER_USERNAME",
                         passwordVariable: "DOCKER_PASSWORD"
                     )
@@ -76,7 +76,7 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: "github-credentials", // <-- Update with your GitHub Jenkins Credential ID
+                        credentialsId: "git-creds", // <-- Update with your GitHub Jenkins Credential ID
                         usernameVariable: "GIT_USERNAME",
                         passwordVariable: "GIT_TOKEN"
                     )
