@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: sujeetsr07/student-task-frontend:v1.0.7
+          image: sujeetsr07/student-task-frontend:v1.0.8
           ports:
             - containerPort: 80
